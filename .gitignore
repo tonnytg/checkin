@@ -1,3 +1,10 @@
+# IDE
+*.idea
+.idea
+
+# ENV
+*.env
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
