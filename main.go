@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
-	"github.com/gorilla/mux"
 )
 
 var templates *template.Template
@@ -16,13 +16,23 @@ func main() {
 	mux.HandleFunc("/", indexHandler).Methods("GET")
 	mux.HandleFunc("/test", handler)
 
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(":8081", mux)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello World")
 }
 
+type Person struct {
+    Name string
+    Lastname  string
+}
+
 func indexHandler(w http.ResponseWriter, r *http.Request){
-	templates.ExecuteTemplate(w, "index.html", "Hello my friend tonnytg")
+
+	p := Person{
+		"Jon",
+		"Snow",
+	}
+	templates.ExecuteTemplate(w, "index.html", p)
 }
