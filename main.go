@@ -13,9 +13,7 @@ func main() {
 
 	templates = template.Must(template.ParseGlob("templates/*.html"))
 	mux := mux.NewRouter()
-	mux.HandleFunc("/", indexHandler).Methods("GET")
-	mux.HandleFunc("/test", handler)
-	mux.HandleFunc("/form", formHandler)
+	mux.HandleFunc("/", formHandler)
 
 	http.ListenAndServe(":8081", mux)
 
@@ -32,15 +30,6 @@ type Person struct {
 	Lastname string
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-
-	p := Person{
-		"Jon",
-		"Snow",
-	}
-	templates.ExecuteTemplate(w, "index.html", p)
-}
-
 type ContactDetails struct {
 	Email   string
 	Subject string
@@ -49,19 +38,16 @@ type ContactDetails struct {
 
 func formHandler(w http.ResponseWriter, r *http.Request) {
 
-	details := ContactDetails{
-		Email:   r.FormValue("email"),
-		Subject: r.FormValue("subject"),
-		Message: r.FormValue("message"),
-	}
 	if r.Method == http.MethodGet {
 		templates.ExecuteTemplate(w, "forms.html", nil)
 		return
 	}
 
-	templates.ExecuteTemplate(w, "forms.html", details)
-	fmt.Println(details.Email)
-	fmt.Println(details.Subject)
-	fmt.Println(details.Message)
+	details := ContactDetails{
+		Email:   r.FormValue("email"),
+		Subject: r.FormValue("subject"),
+		Message: r.FormValue("message"),
+	}
 
+	templates.ExecuteTemplate(w, "index.html", details)
 }
